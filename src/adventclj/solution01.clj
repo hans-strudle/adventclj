@@ -1,5 +1,6 @@
 (ns adventclj.solution01
-  (:require [clojure.string :as str]))
+  (:require [clojure.set :as set]
+            [clojure.string :as str]))
 
 (def dirs [:north :east :south :west])
 
@@ -32,31 +33,31 @@
     (+ (Math/abs (- (:east compass) (:west compass)))
        (Math/abs (- (:north compass) (:south compass)))))
 
-(defn calc-first-meet
+(defn calc-positions
   [compass-list]
     (map (fn [compass] 
             {:x (- (:east compass) (:west compass)) 
              :y (- (:north compass) (:south compass))}) 
           compass-list))
 
-(defn parse-instruction-list
-  [instruction-list]
-    (juxt first #(Integer/parseInt (apply str (rest %)) instruction-list)))
+(defn calc-instersection ;; calc intersection given vertices
+  [vertices]
+    ())
 
 (defn solve 
   [input & args]
-    {:first (->> input 
-         (map name)
-         (map (juxt first #(Integer/parseInt (apply str (rest %)))))
-         (run-ins)
-         (last)
-         (calc-distance))
-     :second (->> input
-          (map name)
-          (map (juxt first #(Integer/parseInt (apply str (rest %)))))
-          (run-ins)
-          (rest)
-          (calc-first-meet)
-          (frequencies)
-          (filter #(> (val %) 1))
-          (println))})
+    (let [vertices (->> input
+                      (map name)
+                      (map (juxt first #(Integer/parseInt (apply str (rest %)))))
+                      (run-ins))]
+        {:first (->> vertices 
+             (last)
+             (calc-distance))
+         :second (->> vertices 
+             (rest)
+             (calc-positions)
+             (frequencies)
+             (filter #(> (val %) 1))
+             (first)
+             (key)
+             (#(+ (Math/abs (:x %)) (Math/abs (:y %)))))})) ;; incorrect

@@ -5,8 +5,7 @@
 
 (defn build-instruction
   [line]
-    (let [instruction (re-find regex line)]
-      ))
+    (let [instruction (re-find regex line)]))
 
 (defn solve
   [input]
