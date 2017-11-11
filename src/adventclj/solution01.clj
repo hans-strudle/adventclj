@@ -40,9 +40,15 @@
              :y (- (:north compass) (:south compass))}) 
           compass-list))
 
-(defn calc-instersection ;; calc intersection given vertices
-  [vertices]
-    ())
+(defn extrapolate
+  [f s]
+    (println f s)
+    (println 44)
+    (let [x (- (:x s) (:x f))
+          y (- (:y s) (:y f))]
+    (if (= x 0) ;; moved in the y direction
+        (take y (iterate #(merge-with - % {:y 1}) s))
+        (take x (iterate #(merge-with - % {:x 1}) s)))))
 
 (defn solve 
   [input & args]
@@ -56,7 +62,12 @@
          :second (->> vertices 
              (rest)
              (calc-positions)
-             (frequencies)
+             (rest)
+             (reverse)
+             (into '({:x 0 :y 0})) ;; 0,0 starting
+             (reductions extrapolate) ;; extrapolate vertices into all blocks visited
+             (println)
+             (frequencies) ;; calculate visits?
              (filter #(> (val %) 1))
              (first)
              (key)
