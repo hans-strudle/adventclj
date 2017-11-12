@@ -1,30 +1,23 @@
 (ns adventclj.solution01
-  (:require [clojure.set :as set]
+  (:require [adventclj.utils :as utils] 
             [clojure.string :as str]))
 
-(def dirs [:north :east :south :west])
+(def directions [:north :east :south :west])
 
 (def compass {:north 0 :east 0 :south 0 :west 0 :dir 0})
 
 (defn next-dir
   [dir next]
-    (if (= next \R) (inc dir) (dec dir)))
+    ({\L -1 \R 1} next)) ;; left -1, right +1
 
 (defn which-dir
-  [dir next] 
-    (get dirs (mod (next-dir dir next) 4))) ;; returns a symbol of the direction 
+  [dirs current next] 
+    (get dirs (mod (+ current (next-dir current next)) 4))) ;; returns a symbol of the direction 
 
 (defn inc-compass
   [compass nxt]
-    (merge compass {(which-dir (:dir compass) (get nxt 0))  ;; symbol
-                    (+ (get nxt 1) ((which-dir (:dir compass) (get nxt 0)) compass)) ;; value
-                    :dir (next-dir (:dir compass) (get nxt 0))})) ;; an index
-
-(defn run-ins
-  [f s]
-    (if (:dir f)
-      (inc-compass f s)
-      (inc-compass (inc-compass compass f) s)))
+    (merge-with + compass {(which-dir directions (:dir compass) (first nxt)) (last nxt)
+                   :dir (next-dir (:dir compass) (first nxt))}))
 
 (defn calc-distance
   [compass]
@@ -37,25 +30,24 @@
      :y (- (:north compass) (:south compass))})
 
 (defn extrapolate
+  "Takes a collection and a point (in the form {:x N :y N})
+   and returns the intermediary points between the last of the first arg, and the second arg
+   assumes that either :x or :y hasn't changed (movement only in one direction"
   [f s]
-    ;;(println (last f))
-    ;;(println s)
-    ;;(println 44)
-    (let [x (- (:x s) (:x (last f)))
-          y (- (:y s) (:y (last f)))]
-        ;;(println x y)
+    (let [point (last f)
+          diff (merge-with - s point)
+          x (:x diff)
+          y (:y diff)
+          dirmap {true - false +}]
     (if (zero? x) ;; moved in the y direction
-        (rest (take (inc (Math/abs y)) (iterate #(merge-with ({true - false +} (neg? y)) % {:y 1}) (last f))))
-        (rest (take (inc (Math/abs x)) (iterate #(merge-with ({true - false +} (neg? x)) % {:x 1}) (last f)))))))
+        ;; returns n points 1 apart, where n = magnitude in changed direction
+        ;; points are (f+1, ..., s) where f is the first point and s is the last (2nd point upwards)
+        (rest (take (inc (Math/abs y)) (iterate #(merge-with (dirmap (neg? y)) % {:y 1}) point)))
+        (rest (take (inc (Math/abs x)) (iterate #(merge-with (dirmap (neg? x)) % {:x 1}) point))))))
 
-;;(def x (reductions extrapolate '({:x 0 :y 5}) '({:x 3 :y 5} {:x 5 :y 5} {:x 12 :y 5})))
-
-;;(println (flatten x))
-
-(defn first-repeat
+(defn first-repeat ;; find first el in frequencies collection
   [coll el]
-    ;;(println el (coll el))
-    (if (= 2 (coll el)) ;; first block
+    (if (= 2 (coll el)) ;; first block visited twice (frequency of 2)
         (reduced el)
         coll))
 
@@ -63,19 +55,15 @@
   [input & args]
     (let [vertices (->> input
                       (map name)
-                      (map (juxt first #(Integer/parseInt (apply str (rest %)))))
-                      (reductions run-ins))]
+                      (map (juxt first #(utils/parse-int (apply str (rest %)))))
+                      (reductions inc-compass compass))]
         {:first (->> vertices 
              (last)
              (calc-distance))
          :second (->> vertices 
-             (rest)
              (map calc-positions)
-             (into '({:x 3 :y 0})) ;; 0,0 starting
-             (reverse)
-             (reductions extrapolate '({:x 0 :y 0})) ;; extrapolate vertices into all blocks visited
+             (rest)
+             (reductions extrapolate '({:x 0 :y 0})) ;; extrapolate vertices into all blocks visited 
              (flatten)
-             ;;(frequencies) ;; calculate visits?
              (#(reduce first-repeat (frequencies %) %))
-             ;;(filter #(> (val %) 1))
-             (#(+ (Math/abs (:x %)) (Math/abs (:y %)))))})) ;; incorrect
+             (#(+ (Math/abs (:x %)) (Math/abs (:y %)))))}))

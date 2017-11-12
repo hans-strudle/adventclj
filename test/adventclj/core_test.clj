@@ -7,13 +7,13 @@
 
 (deftest test-next-dir
   (testing "solution01 next-dir"
-    (is (= (solution01/next-dir 2 \L) 1))
+    (is (= (solution01/next-dir 2 \L) -1))
     (is (= (solution01/next-dir 0 \R) 1))))
 
 (deftest test-which-dir
   (testing "solution01 which-dir"
-    (is (= (solution01/which-dir 3 \L) :south))
-    (is (= (solution01/which-dir 0 \R) :east))))
+    (is (= (solution01/which-dir solution01/directions 3 \L) :south))
+    (is (= (solution01/which-dir solution01/directions 0 \R) :east))))
 
 (deftest test-inc-compass
   (testing "solution01 inc-compass"
@@ -29,7 +29,6 @@
 (deftest test-room-info
   (testing "solution04 room-info"
     (is (= (solution04/room-info "xmtjbzidx-ytz-nojmvbz-525[hyzbw]") {:id 525 :checksum "hyzbw" :word "xmtjbzidxytznojmvbz"}))))
-
 
 (deftest test-cypher-char
   (testing "solution04 cypher-char"

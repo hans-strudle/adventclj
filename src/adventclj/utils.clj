@@ -2,11 +2,13 @@
 
 (defn parse-int
   [n]
-    (Integer/parseInt n))
+    (try 
+      (Integer/parseInt n)
+      (catch Exception e 0)))
 
 (defn top-freq
-  [n word]
-    (->> word
+  [n coll]
+    (->> coll 
       frequencies
       (sort-by (fn [x] [(- (val x)) (int (key x))]))
       (map first)
