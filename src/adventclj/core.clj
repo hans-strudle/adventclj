@@ -10,5 +10,5 @@
     (println (solution01/solve (read-string (str "[" (slurp "resources/input01.txt") "]"))))
     (println "Day 04")
     (println (solution04/solve (str/split-lines (slurp "resources/input04.txt"))))
-    (println "Day 10")
-    (println (solution10/solve (str/split-lines (slurp "resources/input10.txt")))))
+    (println "Day 10"))
+   ;; (println (solution10/solve (str/split-lines (slurp "resources/input10.txt")))))

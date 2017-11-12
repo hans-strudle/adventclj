@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [adventclj.solution01 :as solution01]
             [adventclj.solution04 :as solution04]
+            [adventclj.utils :as utils]
             [adventclj.core :refer :all]))
 
 (deftest test-next-dir
@@ -29,11 +30,12 @@
   (testing "solution04 room-info"
     (is (= (solution04/room-info "xmtjbzidx-ytz-nojmvbz-525[hyzbw]") {:id 525 :checksum "hyzbw" :word "xmtjbzidxytznojmvbz"}))))
 
-(deftest test-top-freq
-  (testing "solution04 top-freq"
-    (is (= (solution04/top-freq "xmtjbzidxytznojmvbz" 5) [\z \b \j \m \t]))))
 
 (deftest test-cypher-char
   (testing "solution04 cypher-char"
     (is (= (solution04/cypher-char \t 283) \q))
     (is (= (solution04/cypher-char \d 7) \k))))
+
+(deftest test-top-freq
+  (testing "utils top-freq"
+    (is (= (utils/top-freq 5 "xmtjbzidxytznojmvbz") [\z \b \j \m \t]))))
