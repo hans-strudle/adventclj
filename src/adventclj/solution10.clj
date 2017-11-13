@@ -12,9 +12,10 @@
 
 (defn execute-instruction
   [bot-vals instruction]
-    (println bot-vals)
+    (println instruction)
     (merge bot-vals {(:bot1 instruction) (flatten (conj [] (:bot1 bot-vals) (:chip1 instruction)))
-                     (:bot2 instruction) (flatten (conj [] (:bot2 bot-vals) (:chip2 instruction)))}))
+                     (:bot2 instruction) []
+                     (:highnum instruction) (flatten (conj [] (get bot-vals (:highnum instruction)) (min (:bot2 instruction))))}))
 
 (defn run-instructions
   [f s]

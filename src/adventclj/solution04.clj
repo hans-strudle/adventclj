@@ -10,8 +10,6 @@
          :checksum csum
          :word (apply str (butlast parts))}))
 
-
-
 (defn check-room
   [room]
       (= (:checksum room) (str/join (utils/top-freq 5 (:word room)))))
@@ -19,8 +17,8 @@
 (defn cypher-char
   [c n]
     (-> (int c)
-        (- 97)
         (+ n 26)
+        (- 97)
         (mod 26)
         (+ 97)
         char))
@@ -31,14 +29,14 @@
 
 (defn solve
   [input]
-    {:first (->> input
-      (map room-info)
-      (filter check-room)
-      (map :id)
-      (reduce +))
-    :second (->> input
-      (map room-info)
-      (filter check-room)
-      (map decrypt)
-      (filter #(str/includes? (:decrypted %) "northpole"))
-      (apply :id))})
+    (let [valid-rooms (->> input
+                (map room-info)
+                (filter check-room))]
+        {:first (->> valid-rooms
+          (map :id)
+          (reduce +))
+        :second (->> valid-rooms
+          (map decrypt)
+          (filter #(str/includes? (:decrypted %) "northpole"))
+          (first)
+          (:id))}))

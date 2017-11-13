@@ -26,6 +26,11 @@
     (is (= (solution01/calc-distance solution01/compass) 0))
     (is (= (solution01/calc-distance (assoc solution01/compass :east 5 :south 3)) 8) :east)))
 
+;;(deftest test-extrapolate
+;;  (testing "solution01 extrapolate"
+;;    (is (= (flatten (solution01/extrapolate 
+;;                     '({:x 0 :y 0}) '({:x 2 :y 0})) '({:x 0 :y 0} {:x 1 :y 0} {:x 2 :y 0}))))))
+
 (deftest test-room-info
   (testing "solution04 room-info"
     (is (= (solution04/room-info "xmtjbzidx-ytz-nojmvbz-525[hyzbw]") {:id 525 :checksum "hyzbw" :word "xmtjbzidxytznojmvbz"}))))
@@ -38,3 +43,4 @@
 (deftest test-top-freq
   (testing "utils top-freq"
     (is (= (utils/top-freq 5 "xmtjbzidxytznojmvbz") [\z \b \j \m \t]))))
+
