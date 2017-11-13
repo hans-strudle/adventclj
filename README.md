@@ -1,14 +1,24 @@
 # adventclj
 
-A Clojure library designed to ... well, that part is up to you.
+Solutions for [Advent of Code](https://adventofcode.com) written in Clojure
+
+- Completed:
+  - [x] Day 1
+  - [x] Day 4
+  - [ ] Day 10
 
 ## Usage
 
-FIXME
+If you have Leiningen installed use `lein run` to run the solutions for all the days.
+
+Use `lein test` to run the tests
+
+To run with just java, make sure your in the root directory of the repo and run:
+`java -jar target\adventclj-0.1.0-SNAPSHOT-standalone.jar`
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2017 Hans Strausl
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.

@@ -1,4 +1,5 @@
 (ns adventclj.core
+  (:gen-class)
   (:require [clojure.string :as str]
             [adventclj.solution01 :as solution01]
             [adventclj.solution04 :as solution04]
