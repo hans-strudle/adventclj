@@ -13,8 +13,8 @@ If you have Leiningen installed use `lein run` to run the solutions for all the 
 
 Use `lein test` to run the tests
 
-To run with just java, make sure your in the root directory of the repo and run:
-`java -jar target\adventclj.jar`
+I have included a standalone jar, make sure your in the root directory of the repo and run:
+`java -jar adventclj.jar`
 
 ## License
 
